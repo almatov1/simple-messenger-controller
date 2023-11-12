@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smessenger.controller.controller.dao.DeleteMessageRequestDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -13,13 +13,13 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RequiredArgsConstructor
 public class DeleteMessageService {
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final AmqpTemplate amqpTemplate;
 
     public Mono<Void> deleteMessage(DeleteMessageRequestDao deleteMessageRequestDao) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            kafkaTemplate.send("messageTopic2", objectMapper.writeValueAsString(deleteMessageRequestDao));
-            log.info("msg sended to kafka");
+            log.info("msg sended");
+            amqpTemplate.convertAndSend("messages", objectMapper.writeValueAsString(deleteMessageRequestDao));
         } catch (JsonProcessingException e) {
             log.error("json problem");
         }

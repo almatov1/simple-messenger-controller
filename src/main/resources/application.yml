@@ -11,8 +11,11 @@ spring:
         opaquetoken:
           client-id: SpringKeycloakSecurity
           client-secret: CBcGD21ehXdvNaot2ZKEhNGoCKsRFyBw
-  kafka:
-    bootstrap-servers: localhost:9092
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: root
+    password: password
 eureka:
   client:
     register-with-eureka: true
